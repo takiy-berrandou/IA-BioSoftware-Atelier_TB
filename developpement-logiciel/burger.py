@@ -1,7 +1,10 @@
 # burger.py
 
+import logging
 from datetime import datetime
 from pathlib import Path
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 
 def get_order_timestamp():
@@ -15,13 +18,13 @@ def get_bun():
         bun = input("Choose your bun (white, whole wheat, gluten-free): ").strip().lower()
         if bun in ["white", "whole wheat", "gluten-free"]:
             return bun
-        print("Invalid choice. Try again.")
+        logging.info("Invalid choice. Try again.")
 
 
 def get_meat():
     """Prompt the user to choose a meat option."""
     meats = ["beef", "chicken", "veggie"]
-    print("Available meats:", ", ".join(meats))
+    logging.info("Available meats: %s", ", ".join(meats))
     choice = input("Select your meat: ").strip().lower()
     return choice if choice in meats else "beef"
 
@@ -77,11 +80,11 @@ def save_burger(burger):
 
 
 def main():
-    """Main routine to build, display, and save a burger order."""
-    print("🍔 Welcome to Burger Builder 🍔")
+    """Build, display, and save a burger order."""
+    logging.info("🍔 Welcome to Burger Builder 🍔")
     burger = assemble_burger()
     save_burger(burger)
-    print(f"✅ Order complete: {burger}")
+    logging.info("✅ Order complete: %s", burger)
 
 
 if __name__ == "__main__":
