@@ -4,6 +4,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
+logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 
@@ -18,13 +19,13 @@ def get_bun():
         bun = input("Choose your bun (white, whole wheat, gluten-free): ").strip().lower()
         if bun in ["white", "whole wheat", "gluten-free"]:
             return bun
-        logging.info("Invalid choice. Try again.")
+        logger.info("Invalid choice. Try again.")
 
 
 def get_meat():
     """Prompt the user to choose a meat option."""
     meats = ["beef", "chicken", "veggie"]
-    logging.info("Available meats: %s", ", ".join(meats))
+    logger.info("Available meats: %s", ", ".join(meats))
     choice = input("Select your meat: ").strip().lower()
     return choice if choice in meats else "beef"
 
@@ -81,10 +82,10 @@ def save_burger(burger):
 
 def main():
     """Build, display, and save a burger order."""
-    logging.info("🍔 Welcome to Burger Builder 🍔")
+    logger.info("🍔 Welcome to Burger Builder 🍔")
     burger = assemble_burger()
     save_burger(burger)
-    logging.info("✅ Order complete: %s", burger)
+    logger.info("✅ Order complete: %s", burger)
 
 
 if __name__ == "__main__":
