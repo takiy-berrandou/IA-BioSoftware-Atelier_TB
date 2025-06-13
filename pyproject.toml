@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "myproject"
 version = "0.1.0"
@@ -12,6 +16,14 @@ dependencies = [
     "pytest-cov",
     "pyyaml>=6.0",
 ]
+
+[tool.setuptools]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["developpement_logiciel"]
+
+[tool.pytest.ini_options]
+pythonpath = "."
 
 [tool.ruff.lint]
 select = ["S", "R", "RET", "Q", "F", "I", "N", "E", "W", "D", "COM", "LOG", "G", "T20", "PYI", "PT"]

@@ -1,0 +1,12 @@
+LICENSE
+README.md
+pyproject.toml
+setup.py
+developpement_logiciel/__init__.py
+developpement_logiciel/burger.py
+myproject.egg-info/PKG-INFO
+myproject.egg-info/SOURCES.txt
+myproject.egg-info/dependency_links.txt
+myproject.egg-info/requires.txt
+myproject.egg-info/top_level.txt
+tests/test_burger.py
