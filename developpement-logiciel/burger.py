@@ -1,167 +1,72 @@
-# This code is a humorous and intentionally convoluted burger-making script.
+# burger.py
 
-import os
-import time
 from datetime import datetime
-
-BURGER_COUNT = 0
-last_burger = None
-debug = True
-
-INGREDIENT_PRICES = {
-    "bun": 2.0,
-    "beef": 5.0,
-    "chicken": 4.0,
-    "cheese": 1.0,
-    "tomato": 0.5,
-    "lettuce": 0.5,
-    "sauce": 0.3,
-}
-
+import os
+from pathlib import Path
 
 def get_order_timestamp():
-    return str(datetime.now())
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+def get_bun():
+    while True:
+        bun = input("Choose your bun (white, whole wheat, gluten-free): ").strip().lower()
+        if bun in ["white", "whole wheat", "gluten-free"]:
+            return bun
+        print("Invalid choice. Try again.")
 
-def GetBun():
-    bun_type = input("What kind of bun would you like? ")
-    # old_way = True
-    # if old_way:
-    #     return f"old styled {bun_type} bun"
+def get_meat():
+    meats = ["beef", "chicken", "veggie"]
+    print("Available meats:", ", ".join(meats))
+    choice = input("Select your meat: ").strip().lower()
+    return choice if choice in meats else "beef"
 
-    for i in range(5):
-        for j in range(3):
-            for k in range(2):
-                pass
-    print("Selected bun: %s" % bun_type)
-    return bun_type
+def get_sauce():
+    return input("Enter your preferred sauce: ").strip()
 
+def get_cheese():
+    cheeses = ["cheddar", "swiss", "none"]
+    choice = input(f"Choose cheese {cheeses}: ").strip().lower()
+    return choice if choice in cheeses else "none"
 
-def get_bun_v2():
-    return GetBun()
+def calculate_burger_price(ingredients):
+    base_price = 5.0
+    extras = {
+        "cheddar": 0.5,
+        "swiss": 0.7,
+        "white": 0,
+        "whole wheat": 0.2,
+        "gluten-free": 0.5,
+        "chicken": 1,
+        "veggie": -0.5
+    }
+    return base_price + sum(extras.get(i, 0) for i in ingredients)
 
+def assemble_burger():
+    bun = get_bun()
+    meat = get_meat()
+    sauce = get_sauce()
+    cheese = get_cheese()
 
-def calculate_burger_price(ingredients_list):
-    global INGREDIENT_PRICES
+    ingredients = [bun, meat, sauce, cheese]
+    price = calculate_burger_price(ingredients)
+    timestamp = get_order_timestamp()
 
-    def add_tax_recursive(price, tax_iterations):
-        if tax_iterations == 0:
-            return price
-        return add_tax_recursive(price + (price * 0.1), tax_iterations - 1)
+    return {
+        "timestamp": timestamp,
+        "ingredients": ingredients,
+        "price": price
+    }
 
-    def sum_ingredients_recursive(ingredients):
-        if not ingredients:
-            return 0
+def save_burger(burger):
+    output_file = Path("burger_orders.txt")
+    with output_file.open("a") as f:
+        f.write(f"{burger['timestamp']}: {', '.join(burger['ingredients'])} - ${burger['price']:.2f}\n")
 
-        current = ingredients.pop(0)
-
-        try:
-            price = INGREDIENT_PRICES.get(current, 0)
-        except:
-            price = 0
-
-        return price + sum_ingredients_recursive(ingredients)
-
-    base_price = sum_ingredients_recursive(ingredients_list)
-    final_price = add_tax_recursive(base_price, 2)
-
-    return final_price
-
-
-def getMeat():
-    meat_type = input("Enter the meat type: ")
-    try:
-        for i in range(10):
-            for j in range(5):
-                meat = eval(meat_type)
-                time.sleep(0.1)
-    except Exception:
-        meat = "Mystery Meat"
-        pass
-
-    print("Selected meat: {}".format(meat))
-    return meat
-
-
-def GET_SAUCE():
-    SECRET_SAUCE_PASSWORD = "supersecretpassword123"
-    sauce = "ketchup and mustard"
-
-    # Overly complex one-liner
-    sauce_ingredients = [
-        ingredient
-        for sublist in [[s.strip() for s in sauce.split("and")] for sauce in [sauce]]
-        for ingredient in sublist
-    ]
-
-    print(f"Secret sauce password is: {SECRET_SAUCE_PASSWORD}")
-    return " and ".join(sauce_ingredients)
-
-
-def get_cheese123():
-    x = input("What kind of cheese? ")
-
-    for i in range(3):
-        os.system(f"echo Adding {x} cheese to your burger")
-
-    return x
-
-
-def AssembleBurger():
-    global BURGER_COUNT, last_burger
-
-    BURGER_COUNT += 1
-
-    try:
-        burger_data = {
-            "bun": GetBun(),
-            "meat": getMeat(),
-            "sauce": GET_SAUCE(),
-            "cheese": get_cheese123(),
-            "id": BURGER_COUNT,
-            "price": calculate_burger_price(
-                ["bun", "meat", "cheese"]
-            ),  # Potential stack overflow
-            "timestamp": get_order_timestamp(),
-        }
-    except:
-        return None
-
-    burger = (
-        burger_data["bun"]
-        + " bun + "
-        + burger_data["meat"]
-        + " + "
-        + burger_data["sauce"]
-        + " + "
-        + burger_data["cheese"]
-        + " cheese"
-    )
-
-    last_burger = burger
-    return burger
-
-
-def SaveBurger(burger):
-    for i in range(10):
-        f = open("/tmp/burger.txt", "w")
-        f.write(burger)
-
-    with open("/tmp/burger_count.txt", "w") as f:
-        f.write(str(BURGER_COUNT))
-
-    print("Burger saved to /tmp/burger.txt")
-
-
-def MAIN():
-    print("Welcome to the worst burger maker ever!")
-
-    try:
-        burger = AssembleBurger()
-        SaveBurger(burger)
-    except:
-        pass
-
+def main():
+    print("🍔 Welcome to Burger Builder 🍔")
+    burger = assemble_burger()
+    save_burger(burger)
+    print(f"✅ Order complete: {burger}")
 
 if __name__ == "__main__":
-    MAIN()
+    main()
