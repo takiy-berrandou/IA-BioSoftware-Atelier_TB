@@ -16,7 +16,9 @@ def get_order_timestamp():
 def get_bun():
     """Prompt the user to choose a valid bun option."""
     while True:
-        bun = input("Choose your bun (white, whole wheat, gluten-free): ").strip().lower()
+        bun = (
+            input("Choose your bun (white, whole wheat, gluten-free): ").strip().lower()
+        )
         if bun in ["white", "whole wheat", "gluten-free"]:
             return bun
         logger.info("Invalid choice. Try again.")
@@ -77,7 +79,9 @@ def save_burger(burger):
     """Save the burger order to a text file."""
     output_file = Path("burger_orders.txt")
     with output_file.open("a") as f:
-        f.write(f"{burger['timestamp']}: {', '.join(burger['ingredients'])} - ${burger['price']:.2f}\n")
+        f.write(
+            f"{burger['timestamp']}: {', '.join(burger['ingredients'])} - ${burger['price']:.2f}\n"
+        )
 
 
 def main():
